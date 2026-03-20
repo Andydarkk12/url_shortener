@@ -4,14 +4,15 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import ShortLink
+import os
 
 @csrf_exempt
 def create_short_link(request):
+    domain = os.getenv('DOMAIN', 'http://localhost:8000')
     if request.method != 'POST':
         return JsonResponse({'error': 'Другой метод'}, status=405)
     
     try:
-        # Получаем данные из запроса
         data = json.loads(request.body)
         original_url = data.get('url')
         
@@ -27,7 +28,7 @@ def create_short_link(request):
         
         return JsonResponse({
             'short_id': link.short_url,
-            'short_url': f'/{link.short_url}',
+            'short_url': f'{domain}/{link.short_url}',
             'original_url': link.original_url
         }, status=201)
         

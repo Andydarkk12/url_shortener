@@ -1,0 +1,7 @@
+.env
+.env.*
+!.env.example
+venv/
+*.pyc
+__pycache__/
+db.sqlite3
